@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>随机元素显示</title>
+    <style>
+        .display-box {
+            width: 300px;
+            height: 50px;
+            border: 1px solid #000;
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 16px;
+        }
+        .button {
+            margin: 20px 0;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+        .clickable {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="display-box" id="box1">显示框1</div>
+    <div class="display-box" id="box2">显示框2</div>
+    <button class="button" onclick="displayRandomElement()">点击随机显示</button>
+
+    <script>
+        let elements = ['张让', '赵忠（大宝）', '孙璋（骆统）', '毕岚（神郭）', '夏恽（杨彪）', '韩悝（马钧）', '栗嵩（神甘）', '段珪（老宝）', '郭胜（李儒）', '高望（神赵）'];
+
+        function getRandomElements(array, count) {
+            const result = [];
+            const clonedArray = [...array];
+            while (result.length < count && clonedArray.length > 0) {
+                const randomIndex = Math.floor(Math.random() * clonedArray.length);
+                result.push(clonedArray.splice(randomIndex, 1)[0]);
+            }
+            return result;
+        }
+
+        function removeElementFromArray(array, element) {
+            const index = array.indexOf(element);
+            console.log(array);
+            console.log(element);
+            console.log(index);
+            if (index !== -1) {
+                array.splice(index, 1);
+            }
+        }
+
+        function displayRandomElement() {
+            const box1 = document.getElementById('box1');
+            const box2 = document.getElementById('box2');
+
+            const box2Element = box2.innerText;
+            removeElementFromArray(elements, box2Element);
+
+            if (elements.length === 0) {
+                alert('列表中没有足够的元素');
+                return;
+            }
+
+            const randomElement1 = elements[Math.floor(Math.random() * elements.length)];
+            box1.innerText = randomElement1;
+            removeElementFromArray(elements, randomElement1);
+
+            const randomElements2 = getRandomElements(elements, 4);
+
+            box2.innerHTML = ''; // 清空显示框2的内容
+            randomElements2.forEach(element => {
+                const span = document.createElement('span');
+                span.className = 'clickable';
+                span.innerText = element;
+                span.style.marginRight = '10px';
+                span.onclick = () => {
+                    box2.innerHTML = '';
+                    const clickedElement = document.createElement('span');
+                    clickedElement.innerText = element;
+                    box2.appendChild(clickedElement);
+                };
+                box2.appendChild(span);
+            });
+        }
+    </script>
+</body>
+</html>
